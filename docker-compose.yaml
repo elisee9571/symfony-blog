@@ -1,0 +1,61 @@
+version: "3.9"
+
+volumes:
+    generated_files:
+    data_storage:
+
+services:
+    mysql:
+        image: mysql
+        container_name: app_mysql
+        restart: always
+        volumes:
+            - data_storage:/var/lib/mysql
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports:
+            - "3306:3306"
+
+    phpmyadmin:
+        container_name: app_pma
+        image: phpmyadmin
+        depends_on:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+        ports:
+            - "8080:80"
+
+    php:
+        build: ./php
+        container_name: app_php
+        volumes:
+          - ./app:/var/www/app
+          - generated_files:/var/www/app/var/cache
+          - ./app/vendor:/var/www/app/vendor:delegated
+        ports:
+            - '9000:9000'
+        depends_on:
+            - mysql
+
+    nginx:
+        container_name: app_nginx
+        image: nginx
+        ports:
+          - '80:80'
+          - '443:443'
+        volumes:
+          - ./app:/var/www/app
+          - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+          - ./logs/nginx:/var/log/nginx/
+        environment:
+            WORKDIR: /var/www/app
+        depends_on:
+          - php
+          - mysql
+        networks:
+            default:
+                aliases:
+                    - 'localhost'
+
+
