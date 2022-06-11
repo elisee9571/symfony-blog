@@ -1,51 +1,22 @@
-image: jakzal/phpqa:php8.0
+name: Php Composer
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-    
-before_script:
-    - docker compose up -d
-    - docker exec -it app_php bash
-    - composer install
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
-cache:
-    paths:
-        - app/vendor/
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
 
-stages:
-    - SecurityChecker
-    - CodingStandards
-    - UnitTests
+            - name: Install composer
+              run: composer install
 
-security-checker:
-    stage: SecurityChecker
-    script:
-        - security-checker security:check app/composer.lock
-    allow_failure: false
+            - name: Run phpstan
+              run: ./vendor/bin/phpstan analyse src --level 5
 
-phpcs:
-    stage: CodingStandards
-    script:
-        - phpcs -v --standard=PSR2 --ignore=./app/src/KERNEL.php ./app/src
-    allow_failure: false
-
-phpstan:
-    stage: CodingStandards
-    script:
-        - phpstan analyse ./app/src
-    allow_failure: false
-
-twig-lint:
-    stage: CodingStandards
-    script:
-        - twig-lint lint ./app/templates
-    allow_failure: false
-
-phpunit:
-    stage: UnitTests
-    script:
-        - php bin/phpunit
-    allow_failure: false
+            - name: php unit
+              run: ./bin/phpunit
