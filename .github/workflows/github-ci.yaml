@@ -1,5 +1,11 @@
 image: jakzal/phpqa:php8.0
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
 before_script:
     - docker compose up -d
     - docker exec -it app_php bash
