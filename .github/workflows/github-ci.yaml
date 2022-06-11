@@ -1,0 +1,59 @@
+image: php:8.0-fpm
+
+before_script:
+    - composer install
+
+cache:
+    paths:
+        - app/vendor/
+
+stages:
+    - SecurityChecker
+    - CodingStandards
+    - UnitTests
+
+security-checker:
+    stage: SecurityChecker
+    script:
+        - local-php-security-checker  --path=./app/composer.lock
+    allow_failure: false
+
+phpcs:
+    stage: CodingStandards
+    script:
+        - phpcs -v --standard=PSR12 --ignore=./app/src/Kernel.php ./src
+    allow_failure: false
+
+phpstan:
+    stage: CodingStandards
+    script:
+        - phpstan analyse ./app/src
+    allow_failure: false
+
+twig-lint:
+    stage: CodingStandards
+    script:
+        - twig-lint lint ./app/templates
+    allow_failure: false
+
+phpunit:
+    image: php:8.0-fpm
+    stage: UnitTests
+    services:
+        - name: mysql
+    variables:
+      MYSQL_ROOT_PASSWORD: pass_test
+      MYSQL_DATABASE: blog
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+      DATABASE_URL: 'mysql://root:@app_php:3306/blog?serverVersion=5.7&charset=utf8mb4'
+    before_script:
+        - apt-get update && apt-get install -y git libzip-dev
+        - curl -sSk https://getcomposer.org/installer | php -- --disable-tls && mv composer.phar /usr/local/bin/composer
+        - docker-php-ext-install mysqli pdo pdo_mysql zip
+        - php bin/console doctrine:database:drop --force --env=test
+        - php bin/console doctrine:database:create --env=test
+        - php bin/console doctrine:migration:migrate --env=test --no-interaction
+    script:
+        - php bin/phpunit
+    allow_failure: false
