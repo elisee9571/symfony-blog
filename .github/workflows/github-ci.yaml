@@ -1,6 +1,8 @@
 image: jakzal/phpqa:php8.0
 
 before_script:
+    - docker compose up -d
+    - docker exec -it app_php bash
     - composer install
 
 cache:
