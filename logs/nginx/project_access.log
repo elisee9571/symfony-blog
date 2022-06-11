@@ -21,3 +21,6 @@
 172.20.0.1 - - [11/Jun/2022:11:08:28 +0000] "GET /_wdt/677e16 HTTP/1.1" 200 17610 "http://127.0.0.1/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
 172.20.0.1 - - [11/Jun/2022:11:08:30 +0000] "GET / HTTP/1.1" 200 57479 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
 172.20.0.1 - - [11/Jun/2022:11:08:37 +0000] "GET /_wdt/2be425 HTTP/1.1" 200 17610 "http://127.0.0.1/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
+172.21.0.1 - - [11/Jun/2022:11:23:36 +0000] "GET / HTTP/1.1" 500 89771 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
+172.21.0.1 - - [11/Jun/2022:11:27:09 +0000] "GET / HTTP/1.1" 200 57479 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
+172.21.0.1 - - [11/Jun/2022:11:27:18 +0000] "GET /_wdt/2475be HTTP/1.1" 200 17612 "http://127.0.0.1/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
